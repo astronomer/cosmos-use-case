@@ -1,0 +1,26 @@
+name: 'my_energy_project'
+
+config-version: 2
+version: '0.1'
+
+model-paths: ["models"]
+seed-paths: ["seeds"]
+test-paths: ["tests"]
+analysis-paths: ["analysis"]
+macro-paths: ["macros"]
+
+target-path: "target"
+clean-targets:
+    - "target"
+    - "dbt_modules"
+    - "logs"
+
+require-dbt-version: [">=1.0.0", "<2.0.0"]
+
+models:
+  my_energy_project:
+    materialized: table
+
+# create a variable called country_code and give it the default value "FR" (for France)
+vars:
+  country_code: "FR"

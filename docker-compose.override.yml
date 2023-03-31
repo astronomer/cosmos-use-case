@@ -1,0 +1,11 @@
+version: "3.1"
+services:
+  scheduler:
+    volumes:
+      - ./dbt:/usr/local/airflow/dbt
+  webserver:
+    volumes:
+      - ./dbt:/usr/local/airflow/dbt
+  triggerer:
+    volumes:
+      - ./dbt:/usr/local/airflow/dbt

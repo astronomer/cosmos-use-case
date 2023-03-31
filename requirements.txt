@@ -1,0 +1,2 @@
+astronomer-cosmos==0.5.1
+astro-sdk-python==1.5.3
