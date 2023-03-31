@@ -1,26 +1,27 @@
+"""
+Shows how to use the Astro dbt provider, also known as Cosmos, to create an Airflow 
+task group from a dbt project.
+The data is loaded into a database and analyzed using the Astro Python SDK. 
+"""
+
 from airflow.decorators import dag
 from cosmos.providers.dbt.task_group import DbtTaskGroup
-
 from astro import sql as aql
 from astro.sql.table import Table, Metadata
 from astro.files import File
-
 from pendulum import datetime
 import pandas as pd
 import logging
 
 task_logger = logging.getLogger("airflow.task")
-
 CONNECTION_ID = "db_conn"
 DB_NAME = "energy_db"
 SCHEMA_NAME = "energy_schema"
 CSV_FILEPATH = "include/subset_energy_capacity.csv"
 DBT_PROJECT_NAME = "my_energy_project"
-
 # the path where the Astro dbt provider will find the dbt executable
 # in the virtual environment created in the Dockerfile
 DBT_EXECUTABLE_PATH = "/usr/local/airflow/dbt_venv/bin/dbt"
-
 # The path to your dbt directory
 DBT_ROOT_PATH = "/usr/local/airflow/dags/dbt"
 
