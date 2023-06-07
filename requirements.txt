@@ -1,2 +1,3 @@
 astronomer-cosmos==0.7.0
 astro-sdk-python==1.6.1
+apache-airflow-providers-snowflake==4.1.0
