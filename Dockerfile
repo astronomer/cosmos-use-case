@@ -1,4 +1,4 @@
-FROM quay.io/astronomer/astro-runtime:7.4.1
+FROM quay.io/astronomer/astro-runtime:8.4.0
 
 # install dbt into a virtual environment
 # replace dbt-postgres with the adapter you need

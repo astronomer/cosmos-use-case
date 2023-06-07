@@ -15,8 +15,8 @@ import logging
 
 task_logger = logging.getLogger("airflow.task")
 CONNECTION_ID = "db_conn"
-DB_NAME = "energy_db"
-SCHEMA_NAME = "energy_schema"
+DB_NAME = "postgres"
+SCHEMA_NAME = "postgres"
 CSV_FILEPATH = "include/subset_energy_capacity.csv"
 DBT_PROJECT_NAME = "my_energy_project"
 # the path where the Astro dbt provider will find the dbt executable
@@ -32,7 +32,7 @@ def log_data_analysis(df: pd.DataFrame):
     to log a table of % Solar and % renewable energy capacity per year.
     If the latest year in the data was also the year with the highest % of solar
     capacity and/or the year with the highest % of renewables capacity a
-    celebratory message is logged as weel."""
+    celebratory message is logged as well."""
 
     latest_year = df.YEAR.max()
     year_with_the_highest_solar_pct = df.loc[df["SOLAR_PCT"].idxmax(), "YEAR"]
@@ -87,6 +87,9 @@ def my_energy_dag():
             "dbt_executable_path": DBT_EXECUTABLE_PATH,
             "schema": SCHEMA_NAME,
             "vars": '{"country_code": "CH"}',
+        },
+        profile_args={
+            "schema": SCHEMA_NAME,
         },
     )
 
