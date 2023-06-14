@@ -1,5 +1,8 @@
 name: 'my_energy_project'
 profile: my_profile
+models:
+  my_energy_project:
+    materialized: table
 # create a variable called country_code and give it the default value "FR" (for France)
 vars:
   country_code: "FR"
