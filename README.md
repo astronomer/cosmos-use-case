@@ -1,25 +1,28 @@
-Overview
-========
+## ELT pipeline analyzing renewable energy data with Airflow, dbt Core, Cosmos, and the Astro Python SDK
 
-Welcome to Astronomer! This project was generated after you ran 'astro dev init' using the Astronomer CLI. This readme describes the contents of the project, as well as how to run Apache Airflow on your local machine.
+Welcome! This pipeline uses a DAG to load data about changes in solar and renewable energy capacity in different European countries from a local CSV file into a data warehouse. Transformation steps in dbt Core filter the data for a country selected by the user and calculate the percentage of solar and renewable energy capacity for that country in different years. Depending on the trajectory of the percentage of solar and renewable energy capacity in the selected country, the DAG will print different messages to the logs.
 
-Project Contents
-================
+> The pipeline in this repo is described in more detail [in Astronomer's docs](https://docs.astronomer.io/learn/use-case-airflow-dbt).
 
-Your Astro project contains the following files and folders:
+Key tools used:
 
-- dags: This folder contains the Python files for your Airflow DAGs. By default, this directory includes an example DAG that runs every 30 minutes and simply prints the current date. It also includes an empty 'my_custom_function' that you can fill out to execute Python code.
-- Dockerfile: This file contains a versioned Astro Runtime Docker image that provides a differentiated Airflow experience. If you want to execute other commands or overrides at runtime, specify them here.
-- include: This folder contains any additional files that you want to include as part of your project. It is empty by default.
-- packages.txt: Install OS-level packages needed for your project by adding them to this file. It is empty by default.
-- requirements.txt: Install Python packages needed for your project by adding them to this file. It is empty by default.
-- plugins: Add custom or community plugins for your project to this file. It is empty by default.
-- airflow_settings.yaml: Use this local-only file to specify Airflow Connections, Variables, and Pools instead of entering them in the Airflow UI as you develop DAGs in this project.
+- [Apache Airflow](https://airflow.apache.org/docs/apache-airflow/stable/index.html).
+- [dbt Core](https://docs.getdbt.com/docs/introduction).
+- [Cosmos](https://github.com/astronomer/astronomer-cosmos).
+- [Astro Python SDK](https://astro-sdk-python.readthedocs.io/en/stable/index.html).
 
-Deploy Your Project Locally
-===========================
+### Prerequisites
 
-1. Start Airflow on your local machine by running 'astro dev start'.
+- The [Astro CLI](https://docs.astronomer.io/astro/cli/overview).
+- [Docker Desktop](https://www.docker.com/products/docker-desktop).
+- Access to a data warehouse supported by dbt Core and the Astro Python SDK. See [dbt supported warehouses](https://docs.getdbt.com/docs/supported-data-platforms) and [Astro Python SDK supported warehouses](https://astro-sdk-python.readthedocs.io/en/stable/supported_databases.html). This example uses a local [PostgreSQL](https://www.postgresql.org/) database with a database called `postgres` and a schema called `postgres`.
+
+### How to run this project
+
+1. Make sure you have the Astro CLI installed and that Docker Desktop is running.
+2. Clone this repo.
+3. Copy the `.env_example` file to `.env` and replace the connection details with your own.
+4. Run `astro dev start` in the repository directory to start Airflow locally.
 
 This command will spin up 4 Docker containers on your machine, each for a different Airflow component:
 
@@ -28,20 +31,12 @@ This command will spin up 4 Docker containers on your machine, each for a differ
 - Scheduler: The Airflow component responsible for monitoring and triggering tasks
 - Triggerer: The Airflow component responsible for triggering deferred tasks
 
-2. Verify that all 4 Docker containers were created by running 'docker ps'.
+5. Access the Airflow UI for your local Airflow project. To do so, go to http://localhost:8080/ and log in with `admin` for both your Username and Password.
 
-Note: Running 'astro dev start' will start your project with the Airflow Webserver exposed at port 8080 and Postgres exposed at port 5432. If you already have either of those ports allocated, you can either stop your existing Docker containers or change the port.
+6. Run the DAG.
 
-3. Access the Airflow UI for your local Airflow project. To do so, go to http://localhost:8080/ and log in with 'admin' for both your Username and Password.
+### See also
 
-You should also be able to access your Postgres Database at 'localhost:5432/postgres'.
-
-Deploy Your Project to Astronomer
-=================================
-
-If you have an Astronomer account, pushing code to a Deployment on Astronomer is simple. For deploying instructions, refer to Astronomer documentation: https://docs.astronomer.io/cloud/deploy-code/
-
-Contact
-=======
-
-The Astronomer CLI is maintained with love by the Astronomer team. To report a bug or suggest a change, reach out to our support
+- Tutorial: [Orchestrate dbt Core jobs with Airflow and Cosmos](https://deploy-preview-2389--gallant-neumann-56599d.netlify.app/learn/airflow-dbt).
+- Documentation: [Astronomer Cosmos](https://astronomer.github.io/astronomer-cosmos/).
+- Webinar: [The easiest way to orchestrate your dbt workflows from Airflow](https://www.astronomer.io/events/webinars/the-easiest-way-to-orchestrate-your-dbt-workflows-from-airflow/).
