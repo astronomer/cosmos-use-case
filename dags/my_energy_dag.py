@@ -1,29 +1,46 @@
 """
-Shows how to use the Astro dbt provider, also known as Cosmos, to create an Airflow 
-task group from a dbt project.
+
+## Run ELT on energy capacity data with Cosmos and dbt Core
+
+Shows how to use the Cosmos, to create an Airflow task group from a dbt project.
 The data is loaded into a database and analyzed using the Astro Python SDK. 
 """
 
 from airflow.decorators import dag
-from cosmos.providers.dbt.task_group import DbtTaskGroup
+from cosmos import DbtTaskGroup, ProjectConfig, ProfileConfig, ExecutionConfig
+from cosmos.profiles import PostgresUserPasswordProfileMapping
 from astro import sql as aql
 from astro.sql.table import Table, Metadata
 from astro.files import File
 from pendulum import datetime
 import pandas as pd
 import logging
+import os
 
 task_logger = logging.getLogger("airflow.task")
+
+CSV_FILEPATH = "include/subset_energy_capacity.csv"
 CONNECTION_ID = "db_conn"
 DB_NAME = "postgres"
 SCHEMA_NAME = "postgres"
-CSV_FILEPATH = "include/subset_energy_capacity.csv"
-DBT_PROJECT_NAME = "my_energy_project"
-# the path where the Astro dbt provider will find the dbt executable
+# The path to the dbt project
+DBT_PROJECT_PATH = f"{os.environ['AIRFLOW_HOME']}/dags/dbt/my_energy_project"
+# The path where Cosmos will find the dbt executable
 # in the virtual environment created in the Dockerfile
-DBT_EXECUTABLE_PATH = "/usr/local/airflow/dbt_venv/bin/dbt"
-# The path to your dbt directory
-DBT_ROOT_PATH = "/usr/local/airflow/dags/dbt"
+DBT_EXECUTABLE_PATH = f"{os.environ['AIRFLOW_HOME']}/dbt_venv/bin/dbt"
+
+profile_config = ProfileConfig(
+    profile_name="default",
+    target_name="dev",
+    profile_mapping=PostgresUserPasswordProfileMapping(
+        conn_id=CONNECTION_ID,
+        profile_args={"schema": SCHEMA_NAME},
+    ),
+)
+
+execution_config = ExecutionConfig(
+    dbt_executable_path=DBT_EXECUTABLE_PATH,
+)
 
 
 @aql.dataframe
@@ -80,16 +97,11 @@ def my_energy_dag():
     # from dbt models
     dbt_tg = DbtTaskGroup(
         group_id="transform_data",
-        dbt_project_name=DBT_PROJECT_NAME,
-        conn_id=CONNECTION_ID,
-        dbt_root_path=DBT_ROOT_PATH,
-        dbt_args={
-            "dbt_executable_path": DBT_EXECUTABLE_PATH,
-            "schema": SCHEMA_NAME,
+        project_config=ProjectConfig(DBT_PROJECT_PATH),
+        profile_config=profile_config,
+        execution_config=execution_config,
+        operator_args={
             "vars": '{"country_code": "CH"}',
-        },
-        profile_args={
-            "schema": SCHEMA_NAME,
         },
     )
 
