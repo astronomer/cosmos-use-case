@@ -37,6 +37,6 @@ This command will spin up 4 Docker containers on your machine, each for a differ
 
 ### See also
 
-- Tutorial: [Orchestrate dbt Core jobs with Airflow and Cosmos](https://deploy-preview-2389--gallant-neumann-56599d.netlify.app/learn/airflow-dbt).
+- Tutorial: [Orchestrate dbt Core jobs with Airflow and Cosmos](https://docs.astronomer.io/learn/airflow-dbt).
 - Documentation: [Astronomer Cosmos](https://astronomer.github.io/astronomer-cosmos/).
-- Webinar: [The easiest way to orchestrate your dbt workflows from Airflow](https://www.astronomer.io/events/webinars/the-easiest-way-to-orchestrate-your-dbt-workflows-from-airflow/).
+- Webinar: [Introducing Cosmos: The Easy Way to Run dbt Models in Airflow](https://www.astronomer.io/events/webinars/introducing-cosmos-the-east-way-to-run-dbt-models-in-airflow/).
