@@ -103,6 +103,7 @@ def my_energy_dag():
         operator_args={
             "vars": '{"country_code": "CH"}',
         },
+        default_args={"retries": 2},
     )
 
     (
